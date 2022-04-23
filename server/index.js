@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const db = require('./db')
 const port = 3000;
+require('dotenv').config();
 
 // create .env file
 
@@ -23,20 +24,42 @@ app.get('/products', (req, res) => {
   let count = req.query.count || '5';
   let offset = (Number(page) - 1) * Number(count);
   db.query('SELECT id, name, slogan, description, category, default_price FROM products LIMIT $1 OFFSET $2',
-  [count, offset.toString()],
-  (err, response) => {
-    if (err) {
-      console.log(err.stack);
+    [count, offset.toString()],
+    (err, response) => {
+      if (err) {
+        console.log(err.stack);
+      }
+      res.send(response.rows);
     }
-    res.send(response.rows);
-  })
+  )
 })
 
 app.get('/products/:product_id', (req, res) => {
-  // req.param.product_id
+  console.log(req.query)
+  db.query(`
+  SELECT products.id, products.name, products.slogan, products.description, products.category, products.default_price, (array(
+    SELECT row_to_json(t)
+    FROM (
+      SELECT features.feature, features.value
+      FROM features
+      INNER JOIN products
+      ON products.id = features.product_id
+      WHERE products.id = $1
+    ) t
+  )) AS features
+  FROM products
+  WHERE products.id = $1;`, [req.params.product_id], (err, response) => {
+    if (err) {
+      console.log(err.stack);
+    }
+    res.send(response.rows[0]);
+  })
 })
 
-app.get('/products/:product_id/styles')
+app.get('/products/:product_id/styles', (req, res) => {
+  db.query(`
+  `)
+})
 
 app.get('/products/:product_id/related')
 
