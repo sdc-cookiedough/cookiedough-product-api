@@ -1,12 +1,13 @@
 {
-  "name": "cookie-dough-product-api",
-  "version": "1.0.0",
+  "name": "cookiedough-product-api",
+  "version": "1.0.1",
   "description": "product api for SDC",
   "main": "index.js",
   "scripts": {
+    "test": "mocha",
     "start": "nodemon ./server/index.js"
   },
-  "author": "",
+  "author": "Nathaniel Belen",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.0",
@@ -14,6 +15,20 @@
     "pg": "^8.7.3"
   },
   "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "mocha": "^9.2.2",
     "nodemon": "^2.0.15"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nathanielbelen/cookiedough-product-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nathanielbelen/cookiedough-product-api/issues"
+  },
+  "homepage": "https://github.com/nathanielbelen/cookiedough-product-api#readme"
 }

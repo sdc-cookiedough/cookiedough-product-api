@@ -1,8 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const db = require('./db')
-const port = 3000;
-require('dotenv').config();
+const port = process.env.PORT || 1337;
+
 
 // page	integer	Selects the page of results to return. Default 1.
 // count	integer	Specifies how many results per page to return. Default 5.
