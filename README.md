@@ -1,1 +1,1 @@
-# cookie-dough-product-api
+# cookiedough-product-api
