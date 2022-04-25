@@ -4,5 +4,8 @@
 ## modules ##
 node_modules/
 
+## test results ##
+test/*.json
+
 ## dotenv file ##
 .env

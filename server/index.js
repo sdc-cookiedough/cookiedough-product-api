@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const db = require('./db')
-const port = process.env.PORT || 1337;
+const port = process.env.PORT || 3000;
 
 
 // page	integer	Selects the page of results to return. Default 1.
@@ -24,7 +24,6 @@ app.get('/products', (req, res) => {
 })
 
 app.get('/products/:product_id', (req, res) => {
-  console.log(req.query)
   db.query(`
   SELECT products.id, products.name, products.slogan, products.description, products.category, products.default_price, (array(
     SELECT row_to_json(t)
