@@ -24,13 +24,14 @@ today.min = String(today.getMinutes());
 export function handleSummary(data) {
   console.log('STARTING SUMMARY GENERATION FAM');
   let filename = `${configuration.vus}VU_${configuration.iterations}_${today.mm}${today.dd}_${today.hr}${today.min}.json`
-  let result = {}
-  result[filename] = JSON.stringify(data, null, 4)
+  let result = {};
+  result[filename] = JSON.stringify(data, null, 4);
+  result.stdout: textSummary(data, { indent: ' ', enableColors: true });
   return result
 }
 
 export default function () {
-  let random = Math.floor(Math.random() * 1000000);
+  let random = (Math.floor(Math.random() * 100000)) + 900000; // last 10% of dataset
   console.log(`Requesting product ID ${random}`);
   http.get(`http://localhost:1337/products/${random}/styles`);
   sleep(1);
