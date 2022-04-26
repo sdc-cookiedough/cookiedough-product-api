@@ -1,7 +1,7 @@
 import http from 'k6/http';
 import { sleep } from 'k6';
 
-const suffix = 'un';
+const suffix = 'op';
 const apiName = 'products';
 
 export const options = {

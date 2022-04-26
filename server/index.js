@@ -83,7 +83,7 @@ app.get('/products/:product_id/related', (req, res) => {
     FROM related
     INNER JOIN products
     ON products.id = related.current_product_id
-    WHERE products.id = $1
+    WHERE products.id = $1;
   `, [req.params.product_id], (err, response) => {
       if (err) {
         console.log(err.stack);

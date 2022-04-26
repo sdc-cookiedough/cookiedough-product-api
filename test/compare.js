@@ -7,15 +7,18 @@ const { table } = require('table');
 // const prompt = require('prompt');
 // use prompt later when fleshing out better node app :)
 
+console.log(`\ncomparing two k6 files`.inverse)
+
+
 let location = {
-  fileOne: '5VU_1000_0425_750.json',
-  fileTwo: '5VU_1000_0425_750.json'
+  fileOne: './results/10vu5000i-styles.un.json',
+  fileTwo: './results/10vu5000i-styles.op.json'
 };
 
 let resultOne, resultTwo;
 
 let compare = (metricName, valueOne, valueTwo) => {
-  console.log(metricName.cyan);
+  console.log(metricName.white.bgCyan);
   let metrics = Object.keys(valueOne);
   let data = [['', location.fileOne, location.fileTwo, '']];
   for (let i = 0; i < metrics.length; i++) {
@@ -23,9 +26,9 @@ let compare = (metricName, valueOne, valueTwo) => {
     let performance = valueTwo[metric] - valueOne[metric];
     let performanceString;
     if (performance > 0) {
-      performanceString = `${performance.toString().green} ↑`;
+      performanceString = `${performance.toString()}ms ↑`.red;
     } else {
-      performanceString = `${performance.toString().red} ↓`;
+      performanceString = `${performance.toString()}ms ↓`.green;
     }
     data.push([metric, valueOne[metric], valueTwo[metric], performanceString])
   }
