@@ -66,7 +66,7 @@ app.get('/products/:product_id/styles', (req, res) => {
           ON styles.id = skus.styleId
           WHERE skus.styleId = styles.id
           AND styles.productId = p.id GROUP BY skus.id
-        ) AS asdf) AS skus FROM styles where productId = p.id
+        ) AS asdf) AS skus FROM styles WHERE productId = p.id
     ) AS t2
   ) AS results
   FROM products AS p WHERE p.id = $1;`, [req.params.product_id], (err, response) => {

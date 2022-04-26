@@ -23,9 +23,9 @@ let compare = (metricName, valueOne, valueTwo) => {
     let performance = valueTwo[metric] - valueOne[metric];
     let performanceString;
     if (performance > 0) {
-      performanceString = `${performance.toString().green}ms ↑`;
+      performanceString = `${performance.toString().green} ↑`;
     } else {
-      performanceString = `${performance.toString().red}ms ↓`;
+      performanceString = `${performance.toString().red} ↓`;
     }
     data.push([metric, valueOne[metric], valueTwo[metric], performanceString])
   }
