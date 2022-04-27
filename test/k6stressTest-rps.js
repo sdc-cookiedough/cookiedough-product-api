@@ -4,19 +4,20 @@ import { sleep } from 'k6';
 export const options = {
   InsecureSkipTLSVerify: true,
   noConnectionReuse: true,
-  stages: [
-    { duration: '10s', target: 100 },
-    { duration: '1m', target: 100 },
-    { duration: '10s', target: 1000 },
-    { duration: '3m', target: 1000 },
-    { duration: '10s', target: 100 },
-    { duration: '3m', target: 100 },
-    { duration: '10s', target: 0 },
-  ],
+  scenarios : {
+    constant_request_rate: {
+      executor: 'constant-arrival-rate',
+      rate: 100,
+      timeUnit: '1s',
+      duration: '1m',
+      preAllocatedVUs: 200,
+      maxVUs: 400
+    }
+  }
 };
 
 export default function () {
-  const BASE_URL = 'http://localhost:1337'; // make sure this is not production
+  const BASE_URL = 'http://localhost:1334'; // make sure this is not production
   const id = (Math.floor(Math.random() * 100000)) + 900000;
 
   const responses = http.batch([

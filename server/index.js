@@ -26,13 +26,11 @@ app.get('/products', (req, res) => {
 app.get('/products/:product_id', (req, res) => {
   db.query(`
   SELECT products.id, products.name, products.slogan, products.description, products.category, products.default_price, (array(
-    SELECT row_to_json(t)
+    SELECT json_agg(t)
     FROM (
       SELECT features.feature, features.value
       FROM features
-      INNER JOIN products
-      ON products.id = features.product_id
-      WHERE products.id = $1
+      WHERE features.product_id = products.id
     ) t
   )) AS features
   FROM products
@@ -45,7 +43,47 @@ app.get('/products/:product_id', (req, res) => {
 })
 
 app.get('/products/:product_id/styles', (req, res) => {
-  db.query(`SELECT p.id AS product_id,
+  db.query(`
+    SELECT id AS style_id, name, original_price, sale_price, default_style as "default?",
+    (SELECT json_agg(
+      json_build_object('url', url, 'thumbnail_url', thumbnail_url)) AS photos
+        FROM photos
+          WHERE styleId = st.id),
+    (SELECT json_object_agg("id", json_build_object('quantity', quantity, 'size', size)) AS skus
+      FROM skus
+        WHERE styleId = st.id)
+    FROM styles st
+    WHERE st.productId = $1
+  `, [req.params.product_id], (err, response) => {
+    if (err) {
+      console.log(err.stack);
+    }
+    res.send(response.rows[0]);
+  })
+})
+
+app.get('/products/:product_id/related', (req, res) => {
+  db.query(`
+    SELECT array_agg(related.related_product_id) AS related
+    FROM related
+    WHERE related.current_product_id = $1;
+  `, [req.params.product_id], (err, response) => {
+      if (err) {
+        console.log(err.stack);
+      }
+      res.send(response.rows[0].related);
+  })
+})
+
+app.listen(port, () => {
+  console.log(`listening on port ${port} lmao`)
+})
+
+
+/*
+old styles query
+
+`SELECT p.id AS product_id,
   (SELECT json_agg(t2) FROM
     (SELECT styles.id AS style_id, styles.name,
       styles.original_price, styles.sale_price,
@@ -69,29 +107,5 @@ app.get('/products/:product_id/styles', (req, res) => {
         ) AS asdf) AS skus FROM styles WHERE productId = p.id
     ) AS t2
   ) AS results
-  FROM products AS p WHERE p.id = $1;`, [req.params.product_id], (err, response) => {
-    if (err) {
-      console.log(err.stack);
-    }
-    res.send(response.rows[0]);
-  })
-})
-
-app.get('/products/:product_id/related', (req, res) => {
-  db.query(`
-    SELECT array_agg(related.related_product_id) AS related
-    FROM related
-    INNER JOIN products
-    ON products.id = related.current_product_id
-    WHERE products.id = $1;
-  `, [req.params.product_id], (err, response) => {
-      if (err) {
-        console.log(err.stack);
-      }
-      res.send(response.rows[0].related);
-  })
-})
-
-app.listen(port, () => {
-  console.log(`listening on port ${port} lmao`)
-})
+  FROM products AS p WHERE p.id = $1;`
+*/

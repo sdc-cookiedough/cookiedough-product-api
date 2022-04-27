@@ -9,10 +9,11 @@ const { table } = require('table');
 
 console.log(`\ncomparing two k6 files`.inverse)
 
+const testName = 'styles'
 
-let location = {
-  fileOne: './results/10vu5000i-styles.un.json',
-  fileTwo: './results/10vu5000i-styles.op.json'
+const location = {
+  fileOne: `./results/10vu5000i-${testName}.un.json`,
+  fileTwo: `./results/10vu5000i-${testName}.op.json`
 };
 
 let resultOne, resultTwo;
@@ -20,7 +21,7 @@ let resultOne, resultTwo;
 let compare = (metricName, valueOne, valueTwo) => {
   console.log(metricName.white.bgCyan);
   let metrics = Object.keys(valueOne);
-  let data = [['', location.fileOne, location.fileTwo, '']];
+  let data = [['', `${testName} query unoptimized`, `${testName} query optimized`, '']];
   for (let i = 0; i < metrics.length; i++) {
     let metric = metrics[i];
     let performance = valueTwo[metric] - valueOne[metric];
