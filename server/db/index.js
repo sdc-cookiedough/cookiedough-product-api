@@ -1,5 +1,6 @@
 const { Pool } = require('pg')
-require('dotenv').config();
+// require('dotenv').config();
+// disabled, using docker .env!
 
 const pool = new Pool({
   user: process.env.PGUSER,
@@ -15,7 +16,7 @@ module.exports = {
     const start = Date.now()
     return pool.query(text, params, (err, res) => {
       const duration = Date.now() - start
-      console.log(`executed query with [params:${params}, duration: ${duration}, rows: ${res.rowCount}]`)
+      console.log(`executed query with [params:${params}, duration: ${duration}]`)
       callback(err, res)
     })
   },

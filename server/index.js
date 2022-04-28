@@ -1,13 +1,19 @@
-require('dotenv').config();
+// require('dotenv').config();
+// disabled, using docker .env!
 const express = require('express');
 const app = express();
 const db = require('./db')
 const port = process.env.PORT || 3000;
 
+app.get('/', (req, res) => {
+  console.log('received a request to /');
+  res.send('hello!');
+})
 
-// page	integer	Selects the page of results to return. Default 1.
-// count	integer	Specifies how many results per page to return. Default 5.
-// maybe find a way to write this query better? page/count/offset data types are all over the place
+app.get('/loaderio-a3f480d9d3d4916a543650a37d15f350', (req, res) => {
+  res.send('loaderio-a3f480d9d3d4916a543650a37d15f350');
+})
+
 app.get('/products', (req, res) => {
   let page = req.query.page || '1';
   let count = req.query.count || '5';
@@ -18,7 +24,11 @@ app.get('/products', (req, res) => {
       if (err) {
         console.log(err.stack);
       }
-      res.send(response.rows);
+      if (response) {
+        res.send(response.rows);
+      } else {
+        res.status(400).end();
+      }
     }
   )
 })
@@ -38,7 +48,11 @@ app.get('/products/:product_id', (req, res) => {
     if (err) {
       console.log(err.stack);
     }
-    res.send(response.rows[0]);
+    if (response) {
+      res.send(response.rows[0]);
+    } else {
+      res.status(400).end();
+    }
   })
 })
 
@@ -58,7 +72,11 @@ app.get('/products/:product_id/styles', (req, res) => {
     if (err) {
       console.log(err.stack);
     }
-    res.send(response.rows[0]);
+    if (response) {
+      res.send(response.rows[0]);
+    } else {
+      res.status(400).end();
+    }
   })
 })
 
@@ -71,12 +89,16 @@ app.get('/products/:product_id/related', (req, res) => {
       if (err) {
         console.log(err.stack);
       }
-      res.send(response.rows[0].related);
+      if (response) {
+        res.send(response.rows[0].related);
+      } else {
+        res.status(400).end();
+      }
   })
 })
 
 app.listen(port, () => {
-  console.log(`listening on port ${port} lmao`)
+  console.log(`listening on port ${port} lmao THIS COULD BE DIFFERENT FOR DOCKER`)
 })
 
 
