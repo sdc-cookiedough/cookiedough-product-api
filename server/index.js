@@ -1,24 +1,17 @@
 // require('dotenv').config();
 // disabled, using docker .env!
+
 const express = require('express');
 const app = express();
-const db = require('./db')
+const db = require('./db');
 const port = process.env.PORT || 3000;
-
-app.get('/', (req, res) => {
-  console.log('received a request to /');
-  res.send('hello!');
-})
-
-app.get('/loaderio-a3f480d9d3d4916a543650a37d15f350', (req, res) => {
-  res.send('loaderio-a3f480d9d3d4916a543650a37d15f350');
-})
 
 app.get('/products', (req, res) => {
   let page = req.query.page || '1';
   let count = req.query.count || '5';
   let offset = (Number(page) - 1) * Number(count);
-  db.query('SELECT id, name, slogan, description, category, default_price FROM products LIMIT $1 OFFSET $2',
+  db.query(
+    'SELECT id, name, slogan, description, category, default_price FROM products LIMIT $1 OFFSET $2',
     [count, offset.toString()],
     (err, response) => {
       if (err) {
@@ -30,11 +23,12 @@ app.get('/products', (req, res) => {
         res.status(400).end();
       }
     }
-  )
-})
+  );
+});
 
 app.get('/products/:product_id', (req, res) => {
-  db.query(`
+  db.query(
+    `
   SELECT products.id, products.name, products.slogan, products.description, products.category, products.default_price, (array(
     SELECT json_agg(t)
     FROM (
@@ -44,20 +38,24 @@ app.get('/products/:product_id', (req, res) => {
     ) t
   )) AS features
   FROM products
-  WHERE products.id = $1;`, [req.params.product_id], (err, response) => {
-    if (err) {
-      console.log(err.stack);
+  WHERE products.id = $1;`,
+    [req.params.product_id],
+    (err, response) => {
+      if (err) {
+        console.log(err.stack);
+      }
+      if (response) {
+        res.send(response.rows[0]);
+      } else {
+        res.status(400).end();
+      }
     }
-    if (response) {
-      res.send(response.rows[0]);
-    } else {
-      res.status(400).end();
-    }
-  })
-})
+  );
+});
 
 app.get('/products/:product_id/styles', (req, res) => {
-  db.query(`
+  db.query(
+    `
     SELECT id AS style_id, name, original_price, sale_price, default_style as "default?",
     (SELECT json_agg(
       json_build_object('url', url, 'thumbnail_url', thumbnail_url)) AS photos
@@ -68,24 +66,30 @@ app.get('/products/:product_id/styles', (req, res) => {
         WHERE styleId = st.id)
     FROM styles st
     WHERE st.productId = $1
-  `, [req.params.product_id], (err, response) => {
-    if (err) {
-      console.log(err.stack);
+  `,
+    [req.params.product_id],
+    (err, response) => {
+      if (err) {
+        console.log(err.stack);
+      }
+      if (response) {
+        res.send(response.rows[0]);
+      } else {
+        res.status(400).end();
+      }
     }
-    if (response) {
-      res.send(response.rows[0]);
-    } else {
-      res.status(400).end();
-    }
-  })
-})
+  );
+});
 
 app.get('/products/:product_id/related', (req, res) => {
-  db.query(`
+  db.query(
+    `
     SELECT array_agg(related.related_product_id) AS related
     FROM related
     WHERE related.current_product_id = $1;
-  `, [req.params.product_id], (err, response) => {
+  `,
+    [req.params.product_id],
+    (err, response) => {
       if (err) {
         console.log(err.stack);
       }
@@ -94,13 +98,15 @@ app.get('/products/:product_id/related', (req, res) => {
       } else {
         res.status(400).end();
       }
-  })
-})
+    }
+  );
+});
 
 app.listen(port, () => {
-  console.log(`listening on port ${port} lmao THIS COULD BE DIFFERENT FOR DOCKER`)
-})
-
+  console.log(
+    `listening on port ${port}`
+  );
+});
 
 /*
 old styles query
@@ -130,4 +136,5 @@ old styles query
     ) AS t2
   ) AS results
   FROM products AS p WHERE p.id = $1;`
+
 */
