@@ -10,17 +10,17 @@ The microservice consisted of an EC2 instance managing an NGINX load balancer, w
 
 ### Server
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)\
-![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)\
 ![NGINX](https://img.shields.io/badge/NGINX-white?style=for-the-badge)
 
 ### Database
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 
 ### Deployment
-![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
-![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)\
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)\
 
 ### Testing/Benchmarking
-![K6](https://img.shields.io/badge/K6-white?style=for-the-badge)
-![Loader.io](https://img.shields.io/badge/Loader.io-white?style=for-the-badge)
+![K6](https://img.shields.io/badge/K6-white?style=for-the-badge)\
+![Loader.io](https://img.shields.io/badge/Loader.io-white?style=for-the-badge)\
 ![NewRelic](https://img.shields.io/badge/NewRelic-green?style=for-the-badge)
